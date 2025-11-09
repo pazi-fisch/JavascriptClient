@@ -22,3 +22,44 @@ export function setupCounter(element) {
 }
 
 setupCounter(document.getElementById('counter-value'));
+
+
+
+export function setup() {
+
+    const api_path = "http://localhost:8000/api/notes";
+
+    /**
+     * Get all notes from the server and display them in a list.
+     */
+    function getAllNotes() {
+        // perform the GET request
+        fetch(api_path, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(data => {
+                // log data
+                console.log(data);
+                // get the list and remove all current notes
+                const noteList = document.getElementById('notesList');
+                noteList.replaceChildren();
+                // populate list with fetched notes
+                data.result.forEach(note => {
+                    const li = document.createElement('li');
+                    li.innerHTML = note.title + "<br>" + note.content;
+                    noteList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                // something went wrong
+                console.log(error);
+            });
+    }
+
+    document.getElementById('reloadFromServer').addEventListener('click', () => getAllNotes());
+}
+
+setup();
+
+
