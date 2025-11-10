@@ -49,7 +49,7 @@ export function setup() {
                 // create new note to add
                 const newNote = {
                     title: noteTitleDialog.value,
-                    content: noteContentDialog.value,
+                    content: noteContentDialog.value
                 };
                 // perform POST request
                 fetch(api_path, {
@@ -61,10 +61,27 @@ export function setup() {
                         console.log(response.status + ": " + response.statusText)
                     });
             } else if (mode === 'edit') {
-
+                // create note to edit
+                const editNote = {
+                    id: noteIdDialog.textContent,
+                    title: noteTitleDialog.value,
+                    content: noteContentDialog.value
+                };
+                // perform PUT request
+                fetch(api_path + '/' + noteIdDialog.textContent, {
+                    method: 'PUT',
+                    body: JSON.stringify(editNote)
+                })
+                    .then(response => {
+                        // log response
+                        console.log(response.status + ": " + response.statusText)
+                    });
             }
             // done, refresh list
-            getAllNotes();
+            // delayed in order to allow server to handle data manipulation
+            setTimeout(() => {
+                getAllNotes();
+            }, 200);
         }
     });
 
@@ -80,15 +97,36 @@ export function setup() {
             .then(data => {
                 // log data
                 console.log(data);
-                // get the list and remove all current notes
-                const noteList = document.getElementById('notesList');
-                noteList.replaceChildren();
-                // populate list with fetched notes
-                data.result.forEach(note => {
-                    const li = document.createElement('li');
-                    li.innerHTML = note.title + "<br>" + note.content;
-                    noteList.appendChild(li);
-                });
+                if (data.result) {
+                    // notes found
+                    // get the list and remove all current notes
+                    const noteList = document.getElementById('notesList');
+                    noteList.replaceChildren();
+                    // populate list with fetched notes
+                    data.result.forEach(note => {
+                        // button to edit note
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'edit';
+                        editButton.addEventListener('click', () => editNote(note));
+                        // button to delete note
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'delete';
+                        deleteButton.addEventListener('click', () => deleteNote(note));
+                        // create list item title, content and button
+                        const li = document.createElement('li');
+                        li.innerHTML = note.title + "<br>" + note.content + "<br>";
+                        li.appendChild(editButton);
+                        li.appendChild(deleteButton);
+                        noteList.appendChild(li);
+                    });
+                    // show list
+                    document.getElementById('notesList').style.display = 'block';
+                    document.getElementById('noNotesLabel').style.display = 'none';
+                } else {
+                    // no notes found
+                    document.getElementById('notesList').style.display = 'none';
+                    document.getElementById('noNotesLabel').style.display = 'block';
+                }
             })
             .catch(error => {
                 // something went wrong
@@ -104,6 +142,34 @@ export function setup() {
         noteTitleDialog.value = '';
         noteContentDialog.value = '';
         noteDialog.showModal();
+    }
+
+    function editNote(note) {
+        mode = 'edit';
+        // show the dialog to edit an existing note, with ID and timestamp
+        noteIdLabelDialog.style.display = 'block';
+        noteTimestampLabelDialog.style.display = 'block';
+        noteIdDialog.textContent  = note.id;
+        noteTimestampDialog.textContent  = note.timestamp;
+        noteTitleDialog.value = note.title;
+        noteContentDialog.value = note.content;
+        noteDialog.showModal();
+    }
+
+    function deleteNote(note) {
+        // perform DELETE request
+        fetch(api_path + '/' + note.id, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                // log response
+                console.log(response.status + ": " + response.statusText)
+            });
+        // done, refresh list
+        // delayed in order to allow server to handle data manipulation
+        setTimeout(() => {
+            getAllNotes();
+        }, 200);
     }
 
     // set listener for all buttons
