@@ -9,11 +9,13 @@
 </head>
 
 <body>
+
 <main id="app">
     <h1 class="title">
         Simple REST API client displaying notes from local JAVA server
     </h1>
     <button id="reloadFromServer" type="button">reload from server</button>
+    <button id="addNewNote" type="button">add new note</button>
     <div id="notes">
         <ul id="notesList"></ul>
     </div>
@@ -32,6 +34,30 @@
         </div>
     </section>
 </main>
+
+<!--
+    Dialog used to add/edit notes.
+    For new notes only show title and content.
+    For editing notes also show their ID and timestamp.
+-->
+<dialog id="noteDialog">
+    <form method="dialog" id="dialogForm">
+        <div id="noteIdLabelDialog">
+            <label>ID:</label> <label id="noteIdDialog"></label>
+        </div>
+        <div id="noteTimestampLabelDialog">
+            <label><i>Last edited on:</i></label> <label id="noteTimestampDialog"></label>
+        </div>
+        <label>Title: <br> <input type="text" id="noteTitleDialog"> </label>
+        <br>
+        <label>Content: <br> <input type="text" id="noteContentDialog"> </label>
+        <menu>
+            <button value="cancel">Cancel</button>
+            <button value="ok">OK</button>
+        </menu>
+    </form>
+</dialog>
+
 <script type="module" src="/src/main.js"></script>
 </body>
 
