@@ -4,15 +4,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>REACT client</title>
-    <!--<link rel="stylesheet" href="/style.css">-->
+    <title>JAVASCRIPT client</title>
 </head>
 
 <body>
 
+<!--
+    Main view with all main UI elements
+-->
 <main id="app">
     <h1 class="title">
-        Simple REST API client displaying notes from local JAVA server
+        Simple JAVASCRIPT client displaying notes from local JAVA server through REST API
     </h1>
     <button id="reloadFromServer" type="button">reload from server</button>
     <button id="addNewNote" type="button">add new note</button>
@@ -20,20 +22,6 @@
         <ul id="notesList"></ul>
         <label id="noNotesLabel"><i>No notes present</i></label>
     </div>
-
-
-    <section class="counter">
-        <div class="counter-info">
-            <p class="counter-text">Counter is</p>
-            <p class="counter-value" id="counter-value"></p>
-        </div>
-        <div class="counter-interaction">
-            <button id="increaseByOne" type="button">+1</button>
-            <button id="increaseByTwo" type="button">+2</button>
-            <button id="decreaseByOne" type="button">-1</button>
-            <button id="decreaseByTwo" type="button">-2</button>
-        </div>
-    </section>
 </main>
 
 <!--
@@ -59,7 +47,11 @@
     </form>
 </dialog>
 
+<!--
+    Import main script file
+-->
 <script type="module" src="/src/main.js"></script>
+
 </body>
 
 </html>
