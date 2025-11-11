@@ -125,7 +125,7 @@ export function setup() {
         noteIdLabelDialog.style.display = 'block';
         noteTimestampLabelDialog.style.display = 'block';
         noteIdDialog.textContent  = note.id;
-        noteTimestampDialog.textContent  = note.timestamp;
+        noteTimestampDialog.textContent  = new Date(note.timestamp).toLocaleString();
         noteTitleDialog.value = note.title;
         noteContentDialog.value = note.content;
         noteDialog.showModal();
